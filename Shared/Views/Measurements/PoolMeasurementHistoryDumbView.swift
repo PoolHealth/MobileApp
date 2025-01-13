@@ -20,19 +20,19 @@ struct PoolMeasurementHistoryDumbView: View {
                               VStack{
                                   Text("Cl")
                                   Text(value, format: .number.precision(.fractionLength(2)))
-                              }
+                              }.foregroundStyle(.orange)
                           }
                           if let value = el.alkalinity {
                               VStack{
                                   Text("Alk")
                                   Text(value, format: .number.precision(.fractionLength(2)))
-                              }
+                              }.foregroundStyle(.blue)
                           }
                           if let value = el.ph {
                               VStack{
                                   Text("pH")
                                   Text(value, format: .number.precision(.fractionLength(2)))
-                              }
+                              }.foregroundStyle(.red)
                           }
                       }
                 }
