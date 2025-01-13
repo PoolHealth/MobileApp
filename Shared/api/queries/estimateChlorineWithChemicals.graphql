@@ -1,0 +1,9 @@
+query estimateMeasurement($poolID: ID!, $chlorine: [ChlorineChemicalValueInput!], $acid: [AcidChemicalValueInput!], $alkalinity: [AlkalinityChemicalValueInput!]) {
+  estimateMeasurement(
+    input: { poolID: $poolID, chlorine: $chlorine, alkalinity: $alkalinity, acid: $acid }
+  ) {
+    chlorine
+    ph
+    alkalinity
+  }
+}

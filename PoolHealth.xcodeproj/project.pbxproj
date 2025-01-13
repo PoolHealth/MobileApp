@@ -1,0 +1,671 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CEEDA7082D29E15200C26E04 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = CEEDA7072D29E15200C26E04 /* Apollo */; };
+		CEEDA70A2D29E15200C26E04 /* ApolloTestSupport in Frameworks */ = {isa = PBXBuildFile; productRef = CEEDA7092D29E15200C26E04 /* ApolloTestSupport */; };
+		CEEDA70C2D29E15200C26E04 /* ApolloWebSocket in Frameworks */ = {isa = PBXBuildFile; productRef = CEEDA70B2D29E15200C26E04 /* ApolloWebSocket */; };
+		CEEDA70F2D29E18700C26E04 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEDA70E2D29E18700C26E04 /* AuthenticationServices.framework */; };
+		CEEDA7122D29E1BE00C26E04 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CEEDA7112D29E1BE00C26E04 /* KeychainSwift */; };
+		CEEDA7232D2AA02300C26E04 /* PoolHealthSchema in Frameworks */ = {isa = PBXBuildFile; productRef = CEEDA7222D2AA02300C26E04 /* PoolHealthSchema */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CEEDA6CE2D28260C00C26E04 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CEEDA6B32D28260A00C26E04 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CEEDA6BA2D28260A00C26E04;
+			remoteInfo = PoolHealth;
+		};
+		CEEDA6D82D28260C00C26E04 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CEEDA6B32D28260A00C26E04 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CEEDA6BA2D28260A00C26E04;
+			remoteInfo = PoolHealth;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		CEEDA6BB2D28260A00C26E04 /* PoolHealth.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PoolHealth.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEEDA6CD2D28260C00C26E04 /* PoolHealthTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PoolHealthTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEEDA6D72D28260C00C26E04 /* PoolHealthUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PoolHealthUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEEDA70E2D29E18700C26E04 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		CEEDA7302D2AA40100C26E04 /* Exceptions for "PoolHealth" folder in "PoolHealth" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = CEEDA6BA2D28260A00C26E04 /* PoolHealth */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		CEEDA6BD2D28260A00C26E04 /* PoolHealth */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CEEDA7302D2AA40100C26E04 /* Exceptions for "PoolHealth" folder in "PoolHealth" target */,
+			);
+			path = PoolHealth;
+			sourceTree = "<group>";
+		};
+		CEEDA6D02D28260C00C26E04 /* PoolHealthTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = PoolHealthTests;
+			sourceTree = "<group>";
+		};
+		CEEDA6DA2D28260C00C26E04 /* PoolHealthUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = PoolHealthUITests;
+			sourceTree = "<group>";
+		};
+		CEEDA6EB2D28279D00C26E04 /* Shared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Shared;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CEEDA6B82D28260A00C26E04 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEEDA70F2D29E18700C26E04 /* AuthenticationServices.framework in Frameworks */,
+				CEEDA7082D29E15200C26E04 /* Apollo in Frameworks */,
+				CEEDA7122D29E1BE00C26E04 /* KeychainSwift in Frameworks */,
+				CEEDA70C2D29E15200C26E04 /* ApolloWebSocket in Frameworks */,
+				CEEDA7232D2AA02300C26E04 /* PoolHealthSchema in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEEDA6CA2D28260C00C26E04 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEEDA70A2D29E15200C26E04 /* ApolloTestSupport in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEEDA6D42D28260C00C26E04 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CEEDA6B22D28260A00C26E04 = {
+			isa = PBXGroup;
+			children = (
+				CEEDA6EB2D28279D00C26E04 /* Shared */,
+				CEEDA6BD2D28260A00C26E04 /* PoolHealth */,
+				CEEDA6D02D28260C00C26E04 /* PoolHealthTests */,
+				CEEDA6DA2D28260C00C26E04 /* PoolHealthUITests */,
+				CEEDA70D2D29E18700C26E04 /* Frameworks */,
+				CEEDA6BC2D28260A00C26E04 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CEEDA6BC2D28260A00C26E04 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CEEDA6BB2D28260A00C26E04 /* PoolHealth.app */,
+				CEEDA6CD2D28260C00C26E04 /* PoolHealthTests.xctest */,
+				CEEDA6D72D28260C00C26E04 /* PoolHealthUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CEEDA70D2D29E18700C26E04 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CEEDA70E2D29E18700C26E04 /* AuthenticationServices.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CEEDA6BA2D28260A00C26E04 /* PoolHealth */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CEEDA6E12D28260C00C26E04 /* Build configuration list for PBXNativeTarget "PoolHealth" */;
+			buildPhases = (
+				CEEDA6B72D28260A00C26E04 /* Sources */,
+				CEEDA6B82D28260A00C26E04 /* Frameworks */,
+				CEEDA6B92D28260A00C26E04 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				CEEDA6BD2D28260A00C26E04 /* PoolHealth */,
+				CEEDA6EB2D28279D00C26E04 /* Shared */,
+			);
+			name = PoolHealth;
+			packageProductDependencies = (
+				CEEDA7072D29E15200C26E04 /* Apollo */,
+				CEEDA70B2D29E15200C26E04 /* ApolloWebSocket */,
+				CEEDA7112D29E1BE00C26E04 /* KeychainSwift */,
+				CEEDA7222D2AA02300C26E04 /* PoolHealthSchema */,
+			);
+			productName = PoolHealth;
+			productReference = CEEDA6BB2D28260A00C26E04 /* PoolHealth.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CEEDA6CC2D28260C00C26E04 /* PoolHealthTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CEEDA6E42D28260C00C26E04 /* Build configuration list for PBXNativeTarget "PoolHealthTests" */;
+			buildPhases = (
+				CEEDA6C92D28260C00C26E04 /* Sources */,
+				CEEDA6CA2D28260C00C26E04 /* Frameworks */,
+				CEEDA6CB2D28260C00C26E04 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CEEDA6CF2D28260C00C26E04 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				CEEDA6D02D28260C00C26E04 /* PoolHealthTests */,
+			);
+			name = PoolHealthTests;
+			packageProductDependencies = (
+				CEEDA7092D29E15200C26E04 /* ApolloTestSupport */,
+			);
+			productName = PoolHealthTests;
+			productReference = CEEDA6CD2D28260C00C26E04 /* PoolHealthTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CEEDA6D62D28260C00C26E04 /* PoolHealthUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CEEDA6E72D28260C00C26E04 /* Build configuration list for PBXNativeTarget "PoolHealthUITests" */;
+			buildPhases = (
+				CEEDA6D32D28260C00C26E04 /* Sources */,
+				CEEDA6D42D28260C00C26E04 /* Frameworks */,
+				CEEDA6D52D28260C00C26E04 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CEEDA6D92D28260C00C26E04 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				CEEDA6DA2D28260C00C26E04 /* PoolHealthUITests */,
+			);
+			name = PoolHealthUITests;
+			packageProductDependencies = (
+			);
+			productName = PoolHealthUITests;
+			productReference = CEEDA6D72D28260C00C26E04 /* PoolHealthUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CEEDA6B32D28260A00C26E04 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					CEEDA6BA2D28260A00C26E04 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					CEEDA6CC2D28260C00C26E04 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = CEEDA6BA2D28260A00C26E04;
+					};
+					CEEDA6D62D28260C00C26E04 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = CEEDA6BA2D28260A00C26E04;
+					};
+				};
+			};
+			buildConfigurationList = CEEDA6B62D28260A00C26E04 /* Build configuration list for PBXProject "PoolHealth" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CEEDA6B22D28260A00C26E04;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				CEEDA7062D29E15200C26E04 /* XCRemoteSwiftPackageReference "apollo-ios" */,
+				CEEDA7102D29E1BE00C26E04 /* XCRemoteSwiftPackageReference "keychain-swift" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = CEEDA6BC2D28260A00C26E04 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CEEDA6BA2D28260A00C26E04 /* PoolHealth */,
+				CEEDA6CC2D28260C00C26E04 /* PoolHealthTests */,
+				CEEDA6D62D28260C00C26E04 /* PoolHealthUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CEEDA6B92D28260A00C26E04 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEEDA6CB2D28260C00C26E04 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEEDA6D52D28260C00C26E04 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CEEDA6B72D28260A00C26E04 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEEDA6C92D28260C00C26E04 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEEDA6D32D28260C00C26E04 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CEEDA6CF2D28260C00C26E04 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CEEDA6BA2D28260A00C26E04 /* PoolHealth */;
+			targetProxy = CEEDA6CE2D28260C00C26E04 /* PBXContainerItemProxy */;
+		};
+		CEEDA6D92D28260C00C26E04 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CEEDA6BA2D28260A00C26E04 /* PoolHealth */;
+			targetProxy = CEEDA6D82D28260C00C26E04 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		CEEDA6DF2D28260C00C26E04 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CEEDA6E02D28260C00C26E04 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CEEDA6E22D28260C00C26E04 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = PoolHealth/PoolHealth.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"PoolHealth/Preview Content\"";
+				DEVELOPMENT_TEAM = R859U8DTY9;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PoolHealth/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = xax.PoolHealth;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CEEDA6E32D28260C00C26E04 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = PoolHealth/PoolHealth.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"PoolHealth/Preview Content\"";
+				DEVELOPMENT_TEAM = R859U8DTY9;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PoolHealth/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = xax.PoolHealth;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		CEEDA6E52D28260C00C26E04 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R859U8DTY9;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = xax.PoolHealthTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PoolHealth.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PoolHealth";
+			};
+			name = Debug;
+		};
+		CEEDA6E62D28260C00C26E04 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R859U8DTY9;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = xax.PoolHealthTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PoolHealth.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PoolHealth";
+			};
+			name = Release;
+		};
+		CEEDA6E82D28260C00C26E04 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R859U8DTY9;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = xax.PoolHealthUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = PoolHealth;
+			};
+			name = Debug;
+		};
+		CEEDA6E92D28260C00C26E04 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R859U8DTY9;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = xax.PoolHealthUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = PoolHealth;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CEEDA6B62D28260A00C26E04 /* Build configuration list for PBXProject "PoolHealth" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEEDA6DF2D28260C00C26E04 /* Debug */,
+				CEEDA6E02D28260C00C26E04 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CEEDA6E12D28260C00C26E04 /* Build configuration list for PBXNativeTarget "PoolHealth" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEEDA6E22D28260C00C26E04 /* Debug */,
+				CEEDA6E32D28260C00C26E04 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CEEDA6E42D28260C00C26E04 /* Build configuration list for PBXNativeTarget "PoolHealthTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEEDA6E52D28260C00C26E04 /* Debug */,
+				CEEDA6E62D28260C00C26E04 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CEEDA6E72D28260C00C26E04 /* Build configuration list for PBXNativeTarget "PoolHealthUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEEDA6E82D28260C00C26E04 /* Debug */,
+				CEEDA6E92D28260C00C26E04 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CEEDA7062D29E15200C26E04 /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.15.3;
+			};
+		};
+		CEEDA7102D29E1BE00C26E04 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/keychain-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 24.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CEEDA7072D29E15200C26E04 /* Apollo */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CEEDA7062D29E15200C26E04 /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = Apollo;
+		};
+		CEEDA7092D29E15200C26E04 /* ApolloTestSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CEEDA7062D29E15200C26E04 /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = ApolloTestSupport;
+		};
+		CEEDA70B2D29E15200C26E04 /* ApolloWebSocket */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CEEDA7062D29E15200C26E04 /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = ApolloWebSocket;
+		};
+		CEEDA7112D29E1BE00C26E04 /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CEEDA7102D29E1BE00C26E04 /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
+		};
+		CEEDA7222D2AA02300C26E04 /* PoolHealthSchema */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PoolHealthSchema;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = CEEDA6B32D28260A00C26E04 /* Project object */;
+}

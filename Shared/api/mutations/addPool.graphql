@@ -1,0 +1,5 @@
+mutation addPool($name: String!, $volume: Float!){
+  addPool(name:$name, volume:$volume){
+    id
+  }
+}

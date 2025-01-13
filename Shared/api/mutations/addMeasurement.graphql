@@ -1,0 +1,13 @@
+mutation addMeasurement($poolID: ID!
+    $chlorine: Float
+    $alkalinity: Float
+    $ph: Float){
+  addMeasurement(
+    poolID: $poolID
+    chlorine: $chlorine
+    alkalinity: $alkalinity
+    ph: $ph
+  ) {
+    createdAt
+  }
+}

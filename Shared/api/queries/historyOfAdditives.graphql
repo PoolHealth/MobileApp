@@ -1,0 +1,20 @@
+query historyOfAdditives($poolID: ID!) {
+  historyOfAdditives(poolID: $poolID, order: DESC) {
+    createdAt
+    value {
+      __typename
+      ... on ChlorineChemicalValue {
+        chlorineType: type
+        value
+      }
+      ... on AlkalinityChemicalValue {
+        alkalinityType: type
+        value
+      }
+      ... on AcidChemicalValue {
+        acidType: type
+        value
+      }
+    }
+  }
+}

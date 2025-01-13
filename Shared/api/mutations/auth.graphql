@@ -1,0 +1,5 @@
+mutation auth($code: String!, $deviceID: ID!) {
+  authApple(appleCode: $code, deviceID: $deviceID) {
+    token
+  }
+}

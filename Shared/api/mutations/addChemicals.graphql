@@ -1,0 +1,7 @@
+mutation addChemicals($input:ChemicalInput!) {
+  addChemicals(
+    input: $input
+  ) {
+    createdAt
+  }
+}
