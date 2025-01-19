@@ -7,12 +7,30 @@
 
 import SwiftUI
 
-struct PoolParameterView: View {
+struct PoolParameterView<T>: View where T: Hashable, T: RawRepresentable<String> {
+    var title: String
+    var initialValue: T?
+    public var options: [T]
+    @Binding var parameter: T
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack{
+            Text(title)
+            Spacer()
+            Picker(title, selection: $parameter) {
+                ForEach(options, id: \.self) { type in
+                    Text(type.rawValue).tag(type)
+                }
+            }
+        }.onAppear {
+            guard let p = initialValue else {
+                return
+            }
+            self.parameter = p
+        }
+        
     }
 }
 
 #Preview {
-    PoolParameterView()
+    PoolParameterView(title: "Pool type", options: PoolType.allCases, parameter: .constant(PoolType.skimmer))
 }

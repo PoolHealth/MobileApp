@@ -3,5 +3,15 @@ query list{
     id
     name
     volume
+    settings{
+      type
+      shape
+      usageType
+      locationType
+      coordinates{
+        latitude
+        longitude
+      }
+    }
   }
 }

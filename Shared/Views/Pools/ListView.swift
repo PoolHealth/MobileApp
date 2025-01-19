@@ -36,7 +36,7 @@ struct ListView: View {
                     } else {
                         List{
                             ForEach($manager.pools, id: \.id) { $el in
-                                NavigationLink(el.name, destination: PoolView(id: el.id, name: el.name, volume: el.volume, manager: manager))
+                                NavigationLink(el.name, destination: PoolView(id: el.id, name: el.name, volume: el.volume, settings: el.settings, manager: manager))
                             }
                         }.navigationBarTitle("List of pools").refreshable {
                             Task{

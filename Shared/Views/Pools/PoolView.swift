@@ -11,11 +11,17 @@ struct PoolView: View {
     var id: String
     var name: String
     var volume: Double
+    var settings: PoolSettings?
     var measurementDate: Date = Date()
     @ObservedObject var manager: PoolManager
     var body: some View {
         VStack  {
-            Text("\(name), volume \(volume, format: .number.precision(.fractionLength(0))) liters").bold()
+            HStack{
+                Text("\(name), volume \(volume, format: .number.precision(.fractionLength(0))) liters").bold()
+                NavigationLink(destination: PoolChangeSettingsView(id: id, currentSettings: settings, manager:  manager), label: {
+                    Image(systemName: "gear")
+                })
+            }
             Spacer()
             if manager.lastMeasurmentLoading {
                 ProgressView()

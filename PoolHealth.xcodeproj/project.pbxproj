@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CEDB05842D3BA6BB005880D0 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDB05832D3BA6BB005880D0 /* MapKit.framework */; };
 		CEEDA7082D29E15200C26E04 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = CEEDA7072D29E15200C26E04 /* Apollo */; };
 		CEEDA70A2D29E15200C26E04 /* ApolloTestSupport in Frameworks */ = {isa = PBXBuildFile; productRef = CEEDA7092D29E15200C26E04 /* ApolloTestSupport */; };
 		CEEDA70C2D29E15200C26E04 /* ApolloWebSocket in Frameworks */ = {isa = PBXBuildFile; productRef = CEEDA70B2D29E15200C26E04 /* ApolloWebSocket */; };
@@ -33,6 +34,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CEDB05832D3BA6BB005880D0 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		CEEDA6BB2D28260A00C26E04 /* PoolHealth.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PoolHealth.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEEDA6CD2D28260C00C26E04 /* PoolHealthTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PoolHealthTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEEDA6D72D28260C00C26E04 /* PoolHealthUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PoolHealthUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -84,6 +86,7 @@
 				CEEDA7082D29E15200C26E04 /* Apollo in Frameworks */,
 				CEEDA7122D29E1BE00C26E04 /* KeychainSwift in Frameworks */,
 				CEEDA70C2D29E15200C26E04 /* ApolloWebSocket in Frameworks */,
+				CEDB05842D3BA6BB005880D0 /* MapKit.framework in Frameworks */,
 				CEEDA7232D2AA02300C26E04 /* PoolHealthSchema in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -131,6 +134,7 @@
 		CEEDA70D2D29E18700C26E04 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CEDB05832D3BA6BB005880D0 /* MapKit.framework */,
 				CEEDA70E2D29E18700C26E04 /* AuthenticationServices.framework */,
 			);
 			name = Frameworks;

@@ -1,0 +1,12 @@
+mutation addSettings($poolID:ID!, $settings:PoolSettingsInput!){
+  updatePoolSettings(poolID:$poolID, settings:$settings){
+    type
+    usageType
+    locationType
+    shape
+    coordinates{
+      latitude
+      longitude
+    }
+  }
+}

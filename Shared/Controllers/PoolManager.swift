@@ -406,7 +406,7 @@ class PoolManager: ObservableObject {
                         }
                         
                         self.pools = pools.map({ el in
-                            Pool(id: el.id, name: el.name, volume: el.volume)
+                            Pool(id: el.id, name: el.name, volume: el.volume, settings: el.settings.toModel())
                         })
                         
                         return
@@ -430,8 +430,32 @@ class PoolManager: ObservableObject {
             }
         }
     }
+    
+    func setSettings(id: String, settings: PoolSettings) async {
+        log.debug("latitude \(settings.coordinates.latitude), longtitude \(settings.coordinates.longitude)")
+        let result = await Network.shared.apollo.performAsync(mutation: AddSettingsMutation(poolID: id, settings: settings.toGql()))
+            switch result {
+            case .success(let graphQLResult):
+                if let errors = graphQLResult.errors {
+                    print(errors)
+                    return
+                }
+                await MainActor.run {
+                    self.log.debug("settings updated")
+                    self.error = nil
+                }
+                await loadPools()
+                
+            case .failure(let error):
+                await MainActor.run {
+                    self.error = error
+                }
+            }
+    }
         
 }
+
+
 
 
 enum MatchingMeasurementError: Error {
