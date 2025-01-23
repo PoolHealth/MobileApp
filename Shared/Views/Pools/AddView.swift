@@ -27,16 +27,17 @@ struct AddView: View {
             }
             Spacer()
             HStack{
+                Button("Cancel") {
+                    showAdd = false
+                }.foregroundStyle(.red)
+                Spacer()
                 Button("Add") {
                     Task {
                         await manager.addPool(name: name, volume: Double(volume))
                         showAdd = false
                     }
                 }
-                Spacer()
-                Button("Cancel") {
-                    showAdd = false
-                }.foregroundStyle(.red)
+                
             }
         }.padding(.horizontal, 30).padding(.vertical, 20)
     }

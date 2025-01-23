@@ -1,0 +1,3 @@
+mutation deleteMeasurements($poolID:ID!, $createdAt:Date!){
+  deleteMeasurement(poolID:$poolID, createdAt:$createdAt)
+}

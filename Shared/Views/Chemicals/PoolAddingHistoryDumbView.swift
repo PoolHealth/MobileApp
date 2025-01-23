@@ -13,9 +13,9 @@ struct PoolAddingHistoryDumbView: View {
         List {
             ForEach(chemicals,id: \.createdAt) { el in
                 Section(header:Text(el.createdAt, format: .dateTime.day().month().year().hour().minute()) ){
-                    ChemicalValuesView(values: el.chlorineChemicals).foregroundStyle(.orange)
-                    ChemicalValuesView(values: el.acidChemicals).foregroundStyle(.red)
-                    ChemicalValuesView(values: el.alkalinityChemical).foregroundStyle(.blue)
+                    EnumValuesView(values: el.chlorineChemicals, units: ChlorineChemicalsUnits).foregroundStyle(.orange)
+                    EnumValuesView(values: el.acidChemicals, units: AcidChemicalsUnits).foregroundStyle(.red)
+                    EnumValuesView(values: el.alkalinityChemical, units: AlkalinityChemicalsUnits).foregroundStyle(.blue)
                 }
             }
         }

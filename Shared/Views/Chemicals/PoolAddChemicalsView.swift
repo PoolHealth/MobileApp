@@ -41,9 +41,10 @@ struct PoolAddChemicalsView: View {
             }
             Spacer()
             
-            AddChemicalForm<ChlorineChemicals>(title: "Chlorine chemicals", options: ChlorineChemicals.allCases, key: $chlorineChemical, value: $chlorineValue){
+            AddChemicalForm<ChlorineChemicals>(title: "Chlorine chemicals", options: ChlorineChemicals.allCases, recommendedValue: recommend(), key: $chlorineChemical, value: $chlorineValue){
                 Task{
                     await estimate()
+                    await manager.loadRecommendation(poolID: poolID)
                 }
             }
             
@@ -90,6 +91,21 @@ struct PoolAddChemicalsView: View {
         }
     }
     
+    private func recommend() -> Double? {
+        guard let ch = chlorineChemical else {
+            return nil
+        }
+        
+        guard let recMap = manager.recommendation else {
+            return nil
+        }
+        
+        guard let value = recMap[ch] else {
+            return nil
+        }
+        
+        return value > 0 ? value : nil
+    }
     
     private func estimate() async {
         var isValid: Bool = false

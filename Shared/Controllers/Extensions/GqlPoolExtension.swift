@@ -179,5 +179,50 @@ extension CLLocationCoordinate2D {
     }
 }
 
+extension ActionType {
+    func toGraphQL() -> GraphQLEnum<PoolHealthSchema.ActionType> {
+        switch self {
+        case .scumLine:
+            return .case(PoolHealthSchema.ActionType.scumLine)
+        case .net:
+            return .case(PoolHealthSchema.ActionType.net)
+        case .backwash:
+            return .case(PoolHealthSchema.ActionType.backwash)
+        case .brush:
+            return .case(PoolHealthSchema.ActionType.brush)
+        case .vacuum:
+            return .case(PoolHealthSchema.ActionType.vacuum)
+        case .pumpBasketClean:
+            return .case(PoolHealthSchema.ActionType.pumpBasketClean)
+        case .skimmerBasketClean:
+            return .case(PoolHealthSchema.ActionType.skimmerBasketClean)
+        case .unknown:
+            return .unknown("unknown")
+        }
+    }
+}
 
-
+extension GraphQLEnum<PoolHealthSchema.ActionType> {
+    func toModel() -> ActionType {
+        switch self {
+        case .scumLine:
+            return .scumLine
+        case .net:
+            return .net
+        case .backwash:
+            return .backwash
+        case .brush:
+            return .brush
+        case .vacuum:
+            return .vacuum
+        case .pumpBasketClean:
+            return .pumpBasketClean
+        case .skimmerBasketClean:
+            return .skimmerBasketClean
+        case .case(_):
+            return .unknown
+        case .unknown(_):
+            return .unknown
+        }
+    }
+}

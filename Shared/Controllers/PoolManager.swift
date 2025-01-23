@@ -20,6 +20,8 @@ class PoolManager: ObservableObject {
     @Published var chemicalsLoading = false
     @Published var chemicals: [Chemicalicals] = []
     @Published var estimated: Measurement?
+    @Published var recommendation: Dictionary<ChlorineChemicals, Double>?
+    @Published var actions: [Action] = []
     let log = Logger(subsystem: "xax.PoolHealth", category: "PoolManager")
     
     func addPool(name: String, volume: Double) async {
@@ -43,6 +45,26 @@ class PoolManager: ObservableObject {
         }
     }
     
+    func logActions(poolID: String, actions: [ActionType]) async {
+        let result = await Network.shared.apollo.performAsync(mutation: LogActionsMutation(poolID: poolID, actions: actions.map{$0.toGraphQL()}))
+        switch result {
+        case .success(let graphQLResult):
+            if let errors = graphQLResult.errors {
+                print(errors)
+                return
+            }
+            guard let createdAt = graphQLResult.data?.logActions else { return }
+            await MainActor.run {
+                self.log.debug("new measurement date \(createdAt)")
+                self.error = nil
+            }
+            await loadActions(poolID: poolID)
+            
+        case .failure(let error):
+            print(error)
+        }
+    }
+    
     func addMeasurement(poolID: String, chlorine: Double?, alkalinity: Double?, pH: Double?) async {
         let result = await Network.shared.apollo.performAsync(mutation: AddMeasurementMutation(poolID: poolID, chlorine: chlorine ?? nil, alkalinity: alkalinity ?? nil, ph: pH ?? nil))
         switch result {
@@ -54,6 +76,25 @@ class PoolManager: ObservableObject {
             guard let createdAt = graphQLResult.data?.addMeasurement.createdAt else { return }
             await MainActor.run {
                 self.log.debug("new measurement date \(createdAt)")
+                self.error = nil
+            }
+            // TODO replace with loadMeasurements
+            await loadMesurements(poolID: poolID)
+            
+        case .failure(let error):
+            print(error)
+        }
+    }
+    
+    func deleteMeasurement(poolID: String, createdAt: Foundation.Date) async {
+        let result = await Network.shared.apollo.performAsync(mutation: DeleteMeasurementsMutation(poolID: poolID, createdAt: createdAt.ISO8601Format()))
+        switch result {
+        case .success(let graphQLResult):
+            if let errors = graphQLResult.errors {
+                print(errors)
+                return
+            }
+            await MainActor.run {
                 self.error = nil
             }
             // TODO replace with loadMeasurements
@@ -153,6 +194,117 @@ class PoolManager: ObservableObject {
                 }
                 await MainActor.run {
                     self.poolDetails = nil
+                    guard let code = err.extensions?["code"] as? Int else {
+                        self.error = err
+                        return
+                    }
+                    switch code {
+                    case -1:
+                            return
+                    default:
+                            self.error = err
+                        return
+                    }
+                }
+            }
+        } catch {
+            await MainActor.run {
+                self.error = error
+            }
+        }
+    }
+    
+    func loadRecommendation(poolID:String) async {
+        do {
+            for try await result in Network.shared.apollo.fetchAsync(query: RecommendQuery(poolID: poolID), cachePolicy: .fetchIgnoringCacheData) {
+                guard let err = result.errors?.first else {
+                    guard let data = result.data?.recommendedChemicals else {
+                        await MainActor.run {
+                            self.recommendation = nil
+                        }
+                        return
+                    }
+                    
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+                    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZZZZZ"
+                    
+                    await MainActor.run {
+                        do {
+                            var result: Dictionary<ChlorineChemicals, Double> = [:]
+                            
+                            for el in data {
+                                guard let chel = el.asChlorineChemicalValue else { continue }
+                                let t = try chel.chlorineType.mapToModel()
+                                result[t] = chel.value
+                            }
+                            
+                            if result.count > 0 {
+                                self.recommendation = result
+                            }
+                        } catch {
+                            self.error = error
+                        }
+                    }
+                    
+                    return
+                }
+                await MainActor.run {
+                    self.poolDetails = nil
+                    guard let code = err.extensions?["code"] as? Int else {
+                        self.error = err
+                        return
+                    }
+                    switch code {
+                    case -1:
+                            return
+                    default:
+                            self.error = err
+                        return
+                    }
+                }
+            }
+        } catch {
+            await MainActor.run {
+                self.error = error
+            }
+        }
+    }
+    
+    func loadActions(poolID:String) async {
+        do {
+            for try await result in Network.shared.apollo.fetchAsync(query: ActionsHistoryQuery(poolID: poolID), cachePolicy: .fetchIgnoringCacheData) {
+                guard let err = result.errors?.first else {
+                    guard let data = result.data?.historyOfActions else {
+                        await MainActor.run {
+                            self.actions = []
+                        }
+                        return
+                    }
+                    
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+                    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+                    
+                    await MainActor.run {
+                        do {
+                            try self.actions = data.map({ el in
+                                guard let date = dateFormatter.date(from:el.createdAt) else {
+                                    log.error("incorrect format of data \(el.createdAt)")
+                                    
+                                    throw MatchingMeasurementError.invalidateDateFormat
+                                }
+                                return Action(actions: el.types.map{$0.toModel()}, createdAt: date)
+                            })
+                        } catch {
+                            self.error = error
+                        }
+                    }
+                    
+                    return
+                }
+                await MainActor.run {
+                    self.actions = []
                     guard let code = err.extensions?["code"] as? Int else {
                         self.error = err
                         return
@@ -405,9 +557,7 @@ class PoolManager: ObservableObject {
                             return
                         }
                         
-                        self.pools = pools.map({ el in
-                            Pool(id: el.id, name: el.name, volume: el.volume, settings: el.settings.toModel())
-                        })
+                        self.pools = pools.map{Pool(id: $0.id, name: $0.name, volume: $0.volume, settings: $0.settings.toModel())}
                         
                         return
                     }

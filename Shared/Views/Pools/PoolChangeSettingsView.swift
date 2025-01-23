@@ -49,7 +49,7 @@ struct PoolChangeSettingsView: View {
                         }
                     }
                 }
-            }
+            }.disabled(poolType == .unknown || usageType == .unknown || shape == .unknown || locationType == .unknown)
         }.navigationBarTitle("PoolSettings")
     }
     

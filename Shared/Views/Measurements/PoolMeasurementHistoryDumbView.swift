@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PoolMeasurementHistoryDumbView: View {
     var measurements: ListOfMeasurements
+    var onDelete: (_ createdAt: Date) -> Void
     var body: some View {
         ForEach(measurements.orderedKeys, id: \.self) { key in
             Section(header: Text(key).fontWeight(.bold)) {
@@ -35,7 +36,17 @@ struct PoolMeasurementHistoryDumbView: View {
                               }.foregroundStyle(.red)
                           }
                       }
-                }
+                }.onDelete(perform: { indexSet in
+                    guard let el = measurements.data[key] else {
+                        return
+                    }
+                    
+                    for index in indexSet {
+                        Task{
+                            onDelete(el[index].createdAt)
+                        }
+                    }
+                })
             }
         }
     }
@@ -58,5 +69,11 @@ struct PoolMeasurementHistoryDumbView: View {
    Measurement(createdAt: dateDaysAgo(100), chlorine: 200, ph: 200, alkalinity: 200),
    Measurement(createdAt: dateDaysAgo(50), chlorine: 100, ph: 100, alkalinity: 100)]
     
-    return PoolMeasurementHistoryDumbView(measurements: measurementsByMonth(measurements: data))
+    return NavigationStack{
+        List{
+            PoolMeasurementHistoryDumbView(measurements: measurementsByMonth(measurements: data), onDelete: { createdAt in
+                print(createdAt)
+            })
+        }
+    }
 }

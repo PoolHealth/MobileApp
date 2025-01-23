@@ -14,6 +14,11 @@ struct Chemicalicals {
     var alkalinityChemical: Dictionary<AlkalinityChemicals, Double>?
 }
 
+enum Units: String {
+    case kg = "kg"
+    case liters = "liters"
+}
+
 enum ChlorineChemicals: String, CaseIterable, Identifiable, Comparable, Hashable {
     static func < (lhs: ChlorineChemicals, rhs: ChlorineChemicals) -> Bool {
         lhs.rawValue > rhs.rawValue
@@ -29,6 +34,16 @@ enum ChlorineChemicals: String, CaseIterable, Identifiable, Comparable, Hashable
     var id: Self { self }
 }
 
+var ChlorineChemicalsUnits: [ChlorineChemicals: Units] = [
+    .calciumHypochlorite65Percent: .kg,
+    .sodiumHypochlorite12Percent: .liters,
+    .sodiumHypochlorite14Percent: .liters,
+    .tCCA90PercentTablets: .kg,
+    .multiActionTablets: .kg,
+    .tCCA90PercentGranules: .kg,
+    .dichlor65Percent: .kg
+]
+
 enum AcidChemicals: String, CaseIterable, Identifiable, Comparable, Hashable {
     static func < (lhs: AcidChemicals, rhs: AcidChemicals) -> Bool {
         lhs.rawValue > rhs.rawValue
@@ -38,6 +53,11 @@ enum AcidChemicals: String, CaseIterable, Identifiable, Comparable, Hashable {
     var id: Self { self }
 }
 
+var AcidChemicalsUnits: [AcidChemicals: Units] = [
+    .hydrochloricAcid: .liters,
+    .sodiumBisulphate: .kg
+]
+
 enum AlkalinityChemicals: String, CaseIterable, Identifiable, Comparable, Hashable {
     static func < (lhs: AlkalinityChemicals, rhs: AlkalinityChemicals) -> Bool {
         lhs.rawValue > rhs.rawValue
@@ -45,6 +65,10 @@ enum AlkalinityChemicals: String, CaseIterable, Identifiable, Comparable, Hashab
     case sodiumBicarbonate = "Sodium Bicarbonate"
     var id: Self { self }
 }
+
+var AlkalinityChemicalsUnits: [AlkalinityChemicals: Units] = [
+    .sodiumBicarbonate: .kg
+]
 
 enum UnknownChemicals: Error {
     case chlorine

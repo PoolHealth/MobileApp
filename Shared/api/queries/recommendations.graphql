@@ -1,0 +1,16 @@
+query recommend($poolID: ID!) {
+  recommendedChemicals(poolID: $poolID) {
+    ... on ChlorineChemicalValue {
+      chlorineType: type
+      value
+    }
+    ... on AlkalinityChemicalValue {
+      alkalinityType: type
+      value
+    }
+    ... on AcidChemicalValue {
+      acidType: type
+      value
+    }
+  }
+}

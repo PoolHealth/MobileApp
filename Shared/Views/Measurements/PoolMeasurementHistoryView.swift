@@ -12,7 +12,12 @@ struct PoolMeasurementHistoryView: View {
     @ObservedObject var manager: PoolManager
     var body: some View {
         List {
-            PoolMeasurementHistoryDumbView(measurements: manager.measurements)
+            PoolMeasurementHistoryDumbView(measurements: manager.measurements){ createdAt in
+                Task {
+                    await manager.deleteMeasurement(poolID: id, createdAt: createdAt)
+                }
+                
+            }
         }.onAppear{
             Task{
                 await manager.loadMesurements(poolID: id)

@@ -7,12 +7,13 @@
 
 import SwiftUI
 
-struct ChemicalValuesView<T>: View where T: Hashable, T: Comparable, T: RawRepresentable<String> {
+struct EnumValuesView<T>: View where T: Hashable, T: Comparable, T: RawRepresentable<String> {
     public var values: Dictionary<T, Double>?
+    public var units: Dictionary<T, Units>
     var body: some View {
         if let vals = values {
             ForEach(vals.sorted(by: >), id: \.key) { key, value in
-                PoolAddingHistoryElementView(name: key.rawValue, value: value)
+                EnumHistoryElementView(name: key.rawValue, value: value, unit: units[key])
             }
         }
     }
@@ -20,6 +21,6 @@ struct ChemicalValuesView<T>: View where T: Hashable, T: Comparable, T: RawRepre
 
 #Preview {
     List{
-        ChemicalValuesView<ChlorineChemicals>(values: [.dichlor65Percent:1.2])
+        EnumValuesView<ChlorineChemicals>(values: [.dichlor65Percent:1.2], units:ChlorineChemicalsUnits)
     }
 }

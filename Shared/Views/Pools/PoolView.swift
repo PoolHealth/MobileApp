@@ -40,11 +40,39 @@ struct PoolView: View {
                 PoolDetailFieldView(text: "Alkalinity change:", value: last.alkalinityChanges)
                 Spacer()
             }
-            NavigationLink("Watch history of measurement", destination: PoolMeasurementHistoryView(id: id, manager: manager))
-            NavigationLink("Add measurement", destination: PoolAddMeasurementView(poolID: id, manager: manager))
+            HStack{
+                Text("Measurements")
+                Spacer()
+                NavigationLink(destination: PoolAddMeasurementView(poolID: id, manager: manager)) {
+                    Image(systemName: "plus")
+                }
+                NavigationLink(destination: PoolMeasurementHistoryView(id: id, manager: manager)) {
+                    Image(systemName: "clock.arrow.circlepath")
+                }
+            }
             Spacer()
-            NavigationLink("Watch history of adding chemicals", destination: PoolAddingHistoryView(id: id, manager: manager))
-            NavigationLink("Add chemicals", destination: PoolAddChemicalsView(poolID: id, manager: manager))
+            HStack{
+                Text("Chemicals")
+                Spacer()
+                NavigationLink(destination: PoolAddChemicalsView(poolID: id, manager: manager)) {
+                    Image(systemName: "plus")
+                }
+                NavigationLink(destination: PoolAddingHistoryView(id: id, manager: manager)) {
+                    Image(systemName: "clock.arrow.circlepath")
+                }
+            }
+            Spacer()
+            HStack{
+                Text("Actions")
+                Spacer()
+                NavigationLink(destination: LogActionView(poolID: id, manager: manager)) {
+                    Image(systemName: "plus")
+                }
+                NavigationLink(destination: ActionsHistoryView(poolID: id, manager: manager)) {
+                    Image(systemName: "clock.arrow.circlepath")
+                }
+            }
+            Spacer()
         }.padding(.horizontal, 20).navigationBarTitle("Pool details").onAppear{
             Task{
                 await manager.poolDetails(poolID: id)

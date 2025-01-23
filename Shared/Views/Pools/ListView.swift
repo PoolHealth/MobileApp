@@ -11,10 +11,7 @@ struct ListView: View {
     @ObservedObject var manager: PoolManager
     @State var showAdd: Bool = false
     var body: some View {
-        VStack{
-            if let error = manager.error {
-                Text("netowrk error \(error.localizedDescription)").foregroundStyle(.red)
-            }
+        ZStack{
             NavigationStack{
                 if showAdd {
                     AddView(manager: manager, showAdd: $showAdd)
@@ -46,6 +43,12 @@ struct ListView: View {
                     }
                 }
                 
+            }
+            VStack{
+                if let error = manager.error {
+                    Text("netowrk error \(error.localizedDescription)").foregroundStyle(.red)
+                }
+                Spacer()
             }
         }
     }
