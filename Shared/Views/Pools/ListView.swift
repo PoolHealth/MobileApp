@@ -12,7 +12,7 @@ struct ListView: View {
     @State var showAdd: Bool = false
     var body: some View {
         ZStack{
-            NavigationStack{
+            VStack {
                 if showAdd {
                     AddView(manager: manager, showAdd: $showAdd)
                 } else {
@@ -33,16 +33,22 @@ struct ListView: View {
                     } else {
                         List{
                             ForEach($manager.pools, id: \.id) { $el in
-                                NavigationLink(el.name, destination: PoolView(id: el.id, name: el.name, volume: el.volume, settings: el.settings, manager: manager))
-                            }
+                                NavigationLink(el.name, destination: PoolView(id: el.id, name: el.name, volume: el.volume, settings: el.settings, manager: manager, measureManager: MeasureManager()))
+                            }.onDelete(perform: { indexSet in
+                                for index in indexSet {
+                                    Task{
+                                        await manager.deletePool(manager.pools[index].id)
+                                    }
+                                }
+                            })
                         }.navigationBarTitle("List of pools").refreshable {
                             Task{
                                 await manager.loadPools()
                             }
                         }
                     }
+                    NavigationLink("Magic button", destination: PoolMigrationView(manager: manager))
                 }
-                
             }
             VStack{
                 if let error = manager.error {

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PoolMeasurementHistoryView: View {
     var id: String
-    @ObservedObject var manager: PoolManager
+    @ObservedObject var manager: MeasureManager
     var body: some View {
         List {
             PoolMeasurementHistoryDumbView(measurements: manager.measurements){ createdAt in
@@ -31,5 +31,5 @@ struct PoolMeasurementHistoryView: View {
 }
 
 #Preview {
-    PoolMeasurementHistoryView(id: UUID().uuidString, manager: PoolManager())
+    PoolMeasurementHistoryView(id: UUID().uuidString, manager: MeasureManager())
 }

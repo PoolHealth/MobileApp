@@ -8,21 +8,99 @@
 import Foundation
 import os
 import PoolHealthSchema
+import CoreSpotlight
 
 class PoolManager: ObservableObject {
     @Published var error: Error?
     @Published var poolsLoading = true
     @Published var pools: [Pool] = []
-    @Published var lastMeasurmentLoading = false
-    @Published var poolDetails: PoolDetails?
-    @Published var measurementsLoading = false
-    @Published var measurements: ListOfMeasurements = ListOfMeasurements(orderedKeys: [], data: [:])
     @Published var chemicalsLoading = false
     @Published var chemicals: [Chemicalicals] = []
-    @Published var estimated: Measurement?
-    @Published var recommendation: Dictionary<ChlorineChemicals, Double>?
     @Published var actions: [Action] = []
+    @Published var migrationInProgress: Bool = false
+    @Published var migrationStatus = MigrationStatus.notStarted
+    var migrationID: String?
+    
     let log = Logger(subsystem: "xax.PoolHealth", category: "PoolManager")
+    
+    func migrate(sheetLink: String) async {
+        log.debug("sheetLink: \(sheetLink)")
+        let result = await Network.shared.apollo.performAsync(mutation: MigrateMutation(sheetLink: sheetLink))
+        switch result {
+        case .success(let graphQLResult):
+            if let errors = graphQLResult.errors {
+                print(errors)
+                return
+            }
+            guard let id = graphQLResult.data?.migrateFromSheet else { return }
+            await MainActor.run {
+                self.log.debug("new migration id \(id)")
+                self.migrationID = id
+            }
+            await migration()
+            
+        case .failure(let error):
+            print(error)
+        }
+    }
+    
+    func migration() async {
+        guard let id = migrationID else { return }
+        do {
+            for try await result in Network.shared.apollo.fetchAsync(query: MigrationQuery(id: id), cachePolicy: .fetchIgnoringCacheData) {
+                guard let err = result.errors?.first else {
+                    guard let data = result.data?.migrationStatus.status else {
+                        return
+                    }
+                    
+                    await MainActor.run {
+                        switch data {
+                        case .failed:
+                            self.migrationStatus = .failed
+                        case .done:
+                            self.migrationStatus = .completed
+                        case .pending:
+                            self.migrationStatus = .inProgress
+                        case .case(_), .unknown(_):
+                            self.error = NSError(domain: "unknown", code: 0, userInfo: nil)
+                        }
+                    }
+                    
+                    return
+                }
+                await MainActor.run {
+                    guard let code = err.extensions?["code"] as? Int else {
+                        self.error = err
+                        return
+                    }
+                    switch code {
+                    case -1:
+                            return
+                    default:
+                            self.error = err
+                        return
+                    }
+                }
+            }
+        } catch {
+            await MainActor.run {
+                self.error = error
+            }
+        }
+    }
+    
+    func startCheckMigrationStatus() async {
+        while true {
+            do {
+                await migration()
+                try await Task.sleep(for: .seconds(10))
+            } catch {
+                log.error("\(error)")
+                
+                return
+            }
+        }
+    }
     
     func addPool(name: String, volume: Double) async {
         log.debug("name: \(name), volume: \(volume)")
@@ -65,46 +143,6 @@ class PoolManager: ObservableObject {
         }
     }
     
-    func addMeasurement(poolID: String, chlorine: Double?, alkalinity: Double?, pH: Double?) async {
-        let result = await Network.shared.apollo.performAsync(mutation: AddMeasurementMutation(poolID: poolID, chlorine: chlorine ?? nil, alkalinity: alkalinity ?? nil, ph: pH ?? nil))
-        switch result {
-        case .success(let graphQLResult):
-            if let errors = graphQLResult.errors {
-                print(errors)
-                return
-            }
-            guard let createdAt = graphQLResult.data?.addMeasurement.createdAt else { return }
-            await MainActor.run {
-                self.log.debug("new measurement date \(createdAt)")
-                self.error = nil
-            }
-            // TODO replace with loadMeasurements
-            await loadMesurements(poolID: poolID)
-            
-        case .failure(let error):
-            print(error)
-        }
-    }
-    
-    func deleteMeasurement(poolID: String, createdAt: Foundation.Date) async {
-        let result = await Network.shared.apollo.performAsync(mutation: DeleteMeasurementsMutation(poolID: poolID, createdAt: createdAt.ISO8601Format()))
-        switch result {
-        case .success(let graphQLResult):
-            if let errors = graphQLResult.errors {
-                print(errors)
-                return
-            }
-            await MainActor.run {
-                self.error = nil
-            }
-            // TODO replace with loadMeasurements
-            await loadMesurements(poolID: poolID)
-            
-        case .failure(let error):
-            print(error)
-        }
-    }
-    
     func addChemicals(poolID: String, chlorine: Dictionary<ChlorineChemicals,Double>?,acid: Dictionary<AcidChemicals,Double>?,alkalinity: Dictionary<AlkalinityChemicals,Double>?) async {
         
         let result = await Network.shared.apollo.performAsync(mutation: AddChemicalsMutation(input: ChemicalInput(poolID: poolID, chlorine: chlorine.graphQLValue(), acid: acid.graphQLValue(), alkalinity: alkalinity.graphQLValue())))
@@ -127,150 +165,6 @@ class PoolManager: ObservableObject {
         }
     }
     
-    func poolDetails(poolID:String) async {
-        await MainActor.run {
-            self.lastMeasurmentLoading = true
-        }
-        defer {
-            Task {
-                await MainActor.run {
-                    self.lastMeasurmentLoading = false
-                }
-            }
-        }
-        do {
-            for try await result in Network.shared.apollo.fetchAsync(query: PoolDetailsQuery(poolID: poolID), cachePolicy: .fetchIgnoringCacheData) {
-                guard let err = result.errors?.first else {
-                    guard let data = result.data?.historyOfMeasurement else {
-                        await MainActor.run {
-                            self.poolDetails = nil
-                        }
-                        return
-                    }
-                    
-                    if data.count == 0 {
-                        await MainActor.run {
-                            self.poolDetails = nil
-                        }
-                        
-                        return
-                    }
-                    
-                    guard let last = data.first else {
-                        await MainActor.run {
-                            self.poolDetails = nil
-                        }
-                        
-                        return
-                    }
-                    
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
-                    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZZZZZ"
-                    guard let date = dateFormatter.date(from:last.createdAt) else {
-                        log.error("incorrect format of data \(last.createdAt)")
-                        await MainActor.run {
-                            self.poolDetails = nil
-                        }
-                        
-                        return
-                    }
-                    
-                    var details = PoolDetails(freeChlorine: last.measurement.chlorine, ph: last.measurement.ph, alkalinity: last.measurement.alkalinity, measurementsCreatedAt: date)
-                    
-                    if let demand = result.data?.demandMeasurement {
-                        details.alkalinityChanges = demand.alkalinity
-                        details.chlorineDemand = demand.chlorine
-                        details.phChanges = demand.ph
-                    }
-                    
-                    let theDetails = details
-                    
-                    await MainActor.run {
-                        self.poolDetails = theDetails
-                    }
-                    
-                    return
-                }
-                await MainActor.run {
-                    self.poolDetails = nil
-                    guard let code = err.extensions?["code"] as? Int else {
-                        self.error = err
-                        return
-                    }
-                    switch code {
-                    case -1:
-                            return
-                    default:
-                            self.error = err
-                        return
-                    }
-                }
-            }
-        } catch {
-            await MainActor.run {
-                self.error = error
-            }
-        }
-    }
-    
-    func loadRecommendation(poolID:String) async {
-        do {
-            for try await result in Network.shared.apollo.fetchAsync(query: RecommendQuery(poolID: poolID), cachePolicy: .fetchIgnoringCacheData) {
-                guard let err = result.errors?.first else {
-                    guard let data = result.data?.recommendedChemicals else {
-                        await MainActor.run {
-                            self.recommendation = nil
-                        }
-                        return
-                    }
-                    
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
-                    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZZZZZ"
-                    
-                    await MainActor.run {
-                        do {
-                            var result: Dictionary<ChlorineChemicals, Double> = [:]
-                            
-                            for el in data {
-                                guard let chel = el.asChlorineChemicalValue else { continue }
-                                let t = try chel.chlorineType.mapToModel()
-                                result[t] = chel.value
-                            }
-                            
-                            if result.count > 0 {
-                                self.recommendation = result
-                            }
-                        } catch {
-                            self.error = error
-                        }
-                    }
-                    
-                    return
-                }
-                await MainActor.run {
-                    self.poolDetails = nil
-                    guard let code = err.extensions?["code"] as? Int else {
-                        self.error = err
-                        return
-                    }
-                    switch code {
-                    case -1:
-                            return
-                    default:
-                            self.error = err
-                        return
-                    }
-                }
-            }
-        } catch {
-            await MainActor.run {
-                self.error = error
-            }
-        }
-    }
-    
     func loadActions(poolID:String) async {
         do {
             for try await result in Network.shared.apollo.fetchAsync(query: ActionsHistoryQuery(poolID: poolID), cachePolicy: .fetchIgnoringCacheData) {
@@ -284,7 +178,7 @@ class PoolManager: ObservableObject {
                     
                     let dateFormatter = DateFormatter()
                     dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
-                    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+                    dateFormatter.dateFormat = DateFormat.iso8601.rawValue
                     
                     await MainActor.run {
                         do {
@@ -305,73 +199,6 @@ class PoolManager: ObservableObject {
                 }
                 await MainActor.run {
                     self.actions = []
-                    guard let code = err.extensions?["code"] as? Int else {
-                        self.error = err
-                        return
-                    }
-                    switch code {
-                    case -1:
-                            return
-                    default:
-                            self.error = err
-                        return
-                    }
-                }
-            }
-        } catch {
-            await MainActor.run {
-                self.error = error
-            }
-        }
-    }
-    
-    func loadMesurements(poolID:String) async {
-        await MainActor.run {
-            self.measurementsLoading = true
-        }
-        defer {
-            Task {
-                await MainActor.run {
-                    self.measurementsLoading = false
-                }
-            }
-        }
-        do {
-            for try await result in Network.shared.apollo.fetchAsync(query: HistoryOfMeasurementQuery(poolID: poolID), cachePolicy: .fetchIgnoringCacheData) {
-                guard let err = result.errors?.first else {
-                    guard let data = result.data?.historyOfMeasurement else {
-                        await MainActor.run {
-                            self.measurements = ListOfMeasurements(orderedKeys: [], data: [:])
-                        }
-                        return
-                    }
-                    
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
-                    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZZZZZ"
-                    
-                    await MainActor.run {
-                        do {
-                            var tmp: [Measurement]
-                            try tmp = data.map({ el in
-                                guard let date = dateFormatter.date(from:el.createdAt) else {
-                                    log.error("incorrect format of data \(el.createdAt)")
-                                    
-                                    throw MatchingMeasurementError.invalidateDateFormat
-                                }
-                                return Measurement(createdAt: date, chlorine: el.measurement.chlorine, ph: el.measurement.ph, alkalinity: el.measurement.alkalinity)
-                            })
-                            
-                            self.measurements = measurementsByMonth(measurements: tmp)
-                        } catch {
-                            self.error = error
-                        }   
-                    }
-                    
-                    return
-                }
-                await MainActor.run {
-                    self.poolDetails = nil
                     guard let code = err.extensions?["code"] as? Int else {
                         self.error = err
                         return
@@ -415,7 +242,7 @@ class PoolManager: ObservableObject {
                     
                     let dateFormatter = DateFormatter()
                     dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
-                    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+                    dateFormatter.dateFormat = DateFormat.iso8601.rawValue
                     
                     await MainActor.run {
                         do {
@@ -483,61 +310,6 @@ class PoolManager: ObservableObject {
         }
     }
     
-    func estimateMeasurement(poolID: String, chlorine: Dictionary<ChlorineChemicals,Double>?,acid: Dictionary<AcidChemicals,Double>?,alkalinity: Dictionary<AlkalinityChemicals,Double>?) async {
-        do {
-            for try await result in Network.shared.apollo.fetchAsync(query: EstimateMeasurementQuery(poolID: poolID, chlorine: chlorine.graphQLValue(), acid: acid.graphQLValue(), alkalinity: alkalinity.graphQLValue())) {
-                
-                guard let err = result.errors?.first else {
-                    guard let data = result.data else {
-                        await MainActor.run {
-                            self.estimated = nil
-                        }
-                        return
-                    }
-                    
-                    await MainActor.run {
-                        self.error = nil
-                        self.estimated = Measurement(createdAt: Date())
-                        if let chlorine = data.estimateMeasurement.chlorine {
-                            self.estimated?.chlorine = chlorine
-                        }
-                        
-                        if let ph = data.estimateMeasurement.ph {
-                            self.estimated?.ph = ph
-                        }
-                        
-                        if let alkalinity = data.estimateMeasurement.alkalinity {
-                            self.estimated?.alkalinity = alkalinity
-                        }
-                    }
-                    
-                    return
-                }
-                await MainActor.run {
-                    self.estimated = nil
-                    guard let code = err.extensions?["code"] as? Int else {
-                        self.error = err
-                        return
-                    }
-                    switch code {
-                    case -1:
-                            return
-                    default:
-                            self.error = err
-                        return
-                    }
-                }
-                
-            }
-        
-        } catch {
-            await MainActor.run {
-                self.estimated = nil
-                self.error = error
-            }
-        }
-    }
-    
     func loadPools() async {
         await MainActor.run {
             self.poolsLoading = true
@@ -551,27 +323,35 @@ class PoolManager: ObservableObject {
         }
         do {
             for try await result in Network.shared.apollo.fetchAsync(query: ListQuery(), cachePolicy: .fetchIgnoringCacheData) {
-                await MainActor.run {
-                    guard let err = result.errors?.first else {
-                        guard let pools = result.data?.pools else {
-                            return
-                        }
-                        
-                        self.pools = pools.map{Pool(id: $0.id, name: $0.name, volume: $0.volume, settings: $0.settings.toModel())}
-                        
+                guard let err = result.errors?.first else {
+                    guard let pools = result.data?.pools else {
                         return
                     }
-                    guard let code = err.extensions?["code"] as? Int else {
+                    
+                    let p = pools.map{Pool(id: $0.id, name: $0.name, volume: $0.volume, settings: $0.settings.toModel())}
+                    
+                    await MainActor.run {
+                        self.pools = p
+                    }
+                    
+                    try await CSSearchableIndex.default().indexAppEntities(p)
+                    
+                    return
+                }
+                guard let code = err.extensions?["code"] as? Int else {
+                    await MainActor.run {
                         self.error = err
-                        return
                     }
-                    switch code {
-                    case -1:
-                            return
-                    default:
-                            self.error = err
+                    return
+                }
+                switch code {
+                case -1:
                         return
+                default:
+                    await MainActor.run {
+                        self.error = err
                     }
+                    return
                 }
             }
         } catch {
@@ -602,9 +382,38 @@ class PoolManager: ObservableObject {
                 }
             }
     }
+    
+    func deletePool(_ id: String) async {
+        log.debug("delete pool with id: \(id)")
+        let result = await Network.shared.apollo.performAsync(mutation: DeletePoolMutation(id: id))
+            switch result {
+            case .success(let graphQLResult):
+                if let errors = graphQLResult.errors {
+                    print(errors)
+                    return
+                }
+                await MainActor.run {
+                    self.log.debug("pool succesfully deleted")
+                    self.error = nil
+                }
+                await loadPools()
+                
+            case .failure(let error):
+                await MainActor.run {
+                    self.error = error
+                }
+            }
+    }
         
 }
 
+
+enum MigrationStatus: String, Codable {
+    case notStarted = "Not started"
+    case inProgress = "In progress"
+    case completed = "Completed"
+    case failed = "Failed"
+}
 
 
 
@@ -626,31 +435,6 @@ extension InputErrors: LocalizedError {
             return NSLocalizedString("Invalid input", comment: "ch or alk or pH is nil")
         }
     }
-}
-
-struct ListOfMeasurements {
-    var orderedKeys:[String]
-    var data: [String:[Measurement]]
-}
-
-func measurementsByMonth(measurements:[Measurement]) -> ListOfMeasurements {
-    guard !measurements.isEmpty else { return ListOfMeasurements(orderedKeys: [], data: [:]) }
-    let formatter = DateFormatter()
-    formatter.dateFormat = "MMMM y"
-    var result = [String:[Measurement]]()
-    var orderedKeys:[String] = []
-    for measurement in measurements {
-        let k = formatter.string(from: measurement.createdAt)
-        print(k)
-        guard let el = result[k] else {
-            result[k] = [measurement]
-            orderedKeys.append(k)
-            continue
-        }
-        result[k] =  el + [measurement]
-    }
-    
-    return ListOfMeasurements(orderedKeys: orderedKeys, data: result)
 }
 
 extension GraphQLEnum<ChlorineChemical> {

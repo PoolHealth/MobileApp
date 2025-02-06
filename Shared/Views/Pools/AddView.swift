@@ -10,7 +10,7 @@ import SwiftUI
 struct AddView: View {
     @ObservedObject var manager: PoolManager
     @State private var name = ""
-    @State private var volume = 0
+    @State private var volume: Double?
     @Binding var showAdd: Bool
     var body: some View {
         VStack{
@@ -32,11 +32,14 @@ struct AddView: View {
                 }.foregroundStyle(.red)
                 Spacer()
                 Button("Add") {
+                    guard let volume = volume else {
+                        return
+                    }
                     Task {
                         await manager.addPool(name: name, volume: Double(volume))
                         showAdd = false
                     }
-                }
+                }.disabled(volume == nil || name == "")
                 
             }
         }.padding(.horizontal, 30).padding(.vertical, 20)

@@ -10,6 +10,7 @@ import MapKit
 
 struct PoolChangeSettingsView: View {
     var id: String
+    var name: String
     var currentSettings: PoolSettings?
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var manager: PoolManager
@@ -50,7 +51,7 @@ struct PoolChangeSettingsView: View {
                     }
                 }
             }.disabled(poolType == .unknown || usageType == .unknown || shape == .unknown || locationType == .unknown)
-        }.navigationBarTitle("PoolSettings")
+        }.navigationBarTitle("\(name) PoolSettings")
     }
     
     private func initialPosition() -> MapCameraPosition {
@@ -64,5 +65,5 @@ struct PoolChangeSettingsView: View {
 }
 
 #Preview {
-    PoolChangeSettingsView(id: UUID().uuidString, currentSettings: PoolSettings(type: .skimmer, coordinates: CLLocationCoordinate2D(latitude: 0, longitude: 0)), manager: .init())
+    PoolChangeSettingsView(id: UUID().uuidString, name: "Eleonas", currentSettings: PoolSettings(type: .skimmer, coordinates: CLLocationCoordinate2D(latitude: 0, longitude: 0)), manager: .init())
 }

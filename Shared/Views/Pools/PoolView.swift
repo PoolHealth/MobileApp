@@ -14,19 +14,20 @@ struct PoolView: View {
     var settings: PoolSettings?
     var measurementDate: Date = Date()
     @ObservedObject var manager: PoolManager
+    @ObservedObject var measureManager: MeasureManager
     var body: some View {
         VStack  {
             HStack{
-                Text("\(name), volume \(volume, format: .number.precision(.fractionLength(0))) liters").bold()
-                NavigationLink(destination: PoolChangeSettingsView(id: id, currentSettings: settings, manager:  manager), label: {
+                Text("Volume \(volume, format: .number.precision(.fractionLength(0))) liters").bold()
+                NavigationLink(destination: PoolChangeSettingsView(id: id, name: name, currentSettings: settings, manager:  manager), label: {
                     Image(systemName: "gear")
                 })
             }
             Spacer()
-            if manager.lastMeasurmentLoading {
+            if measureManager.lastMeasurmentLoading {
                 ProgressView()
                 Spacer()
-            } else if let last = manager.poolDetails {
+            } else if let last = measureManager.poolDetails {
                 HStack{
                     Text("Last measurement made on")
                     Spacer()
@@ -43,10 +44,10 @@ struct PoolView: View {
             HStack{
                 Text("Measurements")
                 Spacer()
-                NavigationLink(destination: PoolAddMeasurementView(poolID: id, manager: manager)) {
+                NavigationLink(destination: PoolAddMeasurementView(poolID: id, manager: measureManager)) {
                     Image(systemName: "plus")
                 }
-                NavigationLink(destination: PoolMeasurementHistoryView(id: id, manager: manager)) {
+                NavigationLink(destination: PoolMeasurementHistoryView(id: id, manager: measureManager)) {
                     Image(systemName: "clock.arrow.circlepath")
                 }
             }
@@ -54,7 +55,7 @@ struct PoolView: View {
             HStack{
                 Text("Chemicals")
                 Spacer()
-                NavigationLink(destination: PoolAddChemicalsView(poolID: id, manager: manager)) {
+                NavigationLink(destination: PoolAddChemicalsView(poolID: id, manager: manager, measureManager: measureManager)) {
                     Image(systemName: "plus")
                 }
                 NavigationLink(destination: PoolAddingHistoryView(id: id, manager: manager)) {
@@ -73,9 +74,9 @@ struct PoolView: View {
                 }
             }
             Spacer()
-        }.padding(.horizontal, 20).navigationBarTitle("Pool details").onAppear{
+        }.padding(.horizontal, 20).navigationBarTitle(name).onAppear{
             Task{
-                await manager.poolDetails(poolID: id)
+                await measureManager.poolDetails(poolID: id)
             }
         }
     }
@@ -83,6 +84,6 @@ struct PoolView: View {
 
 #Preview {
     NavigationStack {
-        PoolView(id: UUID().uuidString, name: "Eleanor", volume: 10000000, manager: PoolManager())
+        PoolView(id: UUID().uuidString, name: "Eleanor", volume: 10000000, manager: PoolManager(), measureManager: MeasureManager())
     }
 }

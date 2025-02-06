@@ -11,6 +11,7 @@ struct PoolAddChemicalsView: View {
     var poolID: String
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var manager: PoolManager
+    @ObservedObject var measureManager: MeasureManager
     @State var chlorineChemical: ChlorineChemicals?
     @State var chlorineValue: Double?
     @State var acidChemical: AcidChemicals?
@@ -19,7 +20,7 @@ struct PoolAddChemicalsView: View {
     @State var alkalinityValue: Double?
     var body: some View {
         VStack{
-            if let estimated = manager.estimated {
+            if let estimated = measureManager.estimated {
                 if let chlorine = estimated.chlorine {
                     HStack{
                         Text("Estimated Chlorine:")
@@ -44,7 +45,7 @@ struct PoolAddChemicalsView: View {
             AddChemicalForm<ChlorineChemicals>(title: "Chlorine chemicals", options: ChlorineChemicals.allCases, recommendedValue: recommend(), key: $chlorineChemical, value: $chlorineValue){
                 Task{
                     await estimate()
-                    await manager.loadRecommendation(poolID: poolID)
+                    await measureManager.loadRecommendation(poolID: poolID)
                 }
             }
             
@@ -96,7 +97,7 @@ struct PoolAddChemicalsView: View {
             return nil
         }
         
-        guard let recMap = manager.recommendation else {
+        guard let recMap = measureManager.recommendation else {
             return nil
         }
         
@@ -131,9 +132,9 @@ struct PoolAddChemicalsView: View {
         }
         
         if isValid {
-            await manager.estimateMeasurement(poolID: poolID, chlorine: chlorine, acid: acid, alkalinity: alkalinity)
+            await measureManager.estimateMeasurement(poolID: poolID, chlorine: chlorine, acid: acid, alkalinity: alkalinity)
         } else {
-            manager.estimated = nil
+            measureManager.estimated = nil
         }
         
     }
@@ -141,6 +142,6 @@ struct PoolAddChemicalsView: View {
 
 #Preview {
     NavigationStack {
-        PoolAddChemicalsView(poolID: UUID().uuidString, manager: PoolManager())
+        PoolAddChemicalsView(poolID: UUID().uuidString, manager: PoolManager(), measureManager: MeasureManager())
     }
 }

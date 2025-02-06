@@ -10,7 +10,7 @@ import SwiftUI
 struct PoolAddMeasurementView: View {
     var poolID: String
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @ObservedObject var manager: PoolManager
+    @ObservedObject var manager: MeasureManager
     @State var chlorine: Double?
     @State var alkalinity: Double?
     @State var pH: Double?
@@ -44,6 +44,6 @@ struct PoolAddMeasurementView: View {
 
 #Preview {
     NavigationStack {
-        PoolAddMeasurementView(poolID: UUID().uuidString, manager: PoolManager())
+        PoolAddMeasurementView(poolID: UUID().uuidString, manager: MeasureManager())
     }
 }
